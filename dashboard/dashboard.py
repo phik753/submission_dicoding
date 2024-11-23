@@ -1,19 +1,3 @@
-# import streamlit as st
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# import pandas as pd
-
-# # Set Streamlit page configuration
-# st.set_page_config(page_title="Bike Rental Analysis Dashboard", layout="wide")
-
-# # Title
-# st.title("Bike Rental Analysis Dashboard")
-
-# # Dashboard sections
-# st.header("Exploratory Data Analysis")
-
-# day_df_final = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/refs/heads/main/day_df_akhir.csv")
-
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -30,7 +14,7 @@ st.header("Exploratory Data Analysis")
 
 # Load the data
 day_df = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/refs/heads/main/day_df_akhir.csv")
-# hour_df = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/main/hour.csv")
+hour_df = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/refs/heads/main/hour_df_akhir.csv")
 
 # Visualization 1: Rata-rata jumlah penggunaan sepeda tiap jam
 st.subheader("1. Rata-rata jumlah penggunaan sepeda tiap jam")
