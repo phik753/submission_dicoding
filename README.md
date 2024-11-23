@@ -1,2 +1,3 @@
 # submission_dicoding
-proyek analisis data
+## Run Streamlit App
+`streamlit run dashboard.py`
