@@ -1,3 +1,19 @@
+# import streamlit as st
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+# import pandas as pd
+
+# # Set Streamlit page configuration
+# st.set_page_config(page_title="Bike Rental Analysis Dashboard", layout="wide")
+
+# # Title
+# st.title("Bike Rental Analysis Dashboard")
+
+# # Dashboard sections
+# st.header("Exploratory Data Analysis")
+
+# day_df_final = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/refs/heads/main/day_df_akhir.csv")
+
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -12,70 +28,61 @@ st.title("Bike Rental Analysis Dashboard")
 # Dashboard sections
 st.header("Exploratory Data Analysis")
 
-# Section 1: Average bike rentals by hour
-st.subheader("1. Rata-rata Jumlah Penggunaan Sepeda Tiap Jam")
-# Sample data for visualization
-avg_hourly_rentals = pd.DataFrame({
-    'hr': range(24),
-    'cnt': [50, 60, 55, 40, 30, 25, 35, 80, 150, 200, 250, 300, 350, 400, 380, 360, 300, 250, 200, 150, 100, 80, 60, 50]
-})
+# Load the data
+day_df = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/refs/heads/main/day_df_akhir.csv")
+# hour_df = pd.read_csv("https://raw.githubusercontent.com/phik753/submission_dicoding/main/hour.csv")
+
+# Visualization 1: Rata-rata jumlah penggunaan sepeda tiap jam
+st.subheader("1. Rata-rata jumlah penggunaan sepeda tiap jam")
 fig1, ax1 = plt.subplots(figsize=(10, 6))
-sns.lineplot(data=avg_hourly_rentals, x='hr', y='cnt', marker='o', ax=ax1)
+sns.lineplot(data=hour_df.groupby('hr')['cnt'].mean().reset_index(), x='hr', y='cnt', marker='o', ax=ax1)
 ax1.set_title("Rata-rata Penggunaan Sepeda pada Jam Berbeda")
 ax1.set_xlabel("Jam")
 ax1.set_ylabel("Rata-rata Jumlah Sewa Sepeda (cnt)")
 ax1.set_xticks(range(0, 24))
 st.pyplot(fig1)
 
-# Section 2: Average bike rentals by weather
-st.subheader("2. Rata-rata Jumlah Penggunaan Sepeda Berdasarkan Cuaca")
-# Sample data for visualization
-weather_avg = pd.DataFrame({
-    'weathersit': ['Cerah', 'Berawan', 'Hujan Ringan', 'Hujan Lebat'],
-    'cnt': [250, 200, 120, 50]
-})
+# Visualization 2: Rata-rata jumlah penggunaan sepeda berdasarkan cuaca
+st.subheader("2. Rata-rata jumlah penggunaan sepeda berdasarkan cuaca")
+weather_avg = hour_df.groupby('weathersit')['cnt'].mean()
 fig2, ax2 = plt.subplots(figsize=(10, 5))
-sns.barplot(x='weathersit', y='cnt', data=weather_avg, ax=ax2)
+sns.barplot(x=weather_avg.index, y=weather_avg.values, ax=ax2)
 ax2.set_title("Rata-rata Penggunaan Sepeda Berdasarkan Kondisi Cuaca")
-ax2.set_xlabel("Kondisi Cuaca")
+ax2.set_xlabel("Kondisi Cuaca (1: Cerah, 2: Berawan, 3: Hujan Ringan/Snow, 4: Hujan Lebat/Snow Tebal)")
 ax2.set_ylabel("Rata-rata Jumlah Sewa Sepeda")
+ax2.set_xticks([0, 1, 2, 3])
+ax2.set_xticklabels(['Cerah', 'Berawan', 'Hujan Ringan', 'Hujan Lebat'])
 st.pyplot(fig2)
 
-# Section 3: Average bike rentals by month
-st.subheader("3. Rata-rata Jumlah Penggunaan Sepeda Tiap Bulan")
-# Sample data for visualization
-month_avg = pd.DataFrame({
-    'mnth': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    'cnt': [100, 120, 150, 180, 250, 220, 300, 320, 270, 230, 190, 160]
-})
+# Visualization 3: Rata-rata jumlah penggunaan sepeda tiap bulan
+st.subheader("3. Rata-rata jumlah penggunaan sepeda tiap bulan")
+month_avg = hour_df.groupby('mnth')['cnt'].mean()
 fig3, ax3 = plt.subplots(figsize=(10, 6))
-sns.barplot(x='mnth', y='cnt', data=month_avg, ax=ax3)
+sns.barplot(x=month_avg.index, y=month_avg.values, ax=ax3)
 ax3.set_title("Rata-rata Penggunaan Sepeda per Bulan")
-ax3.set_xlabel("Bulan")
+ax3.set_xlabel("Bulan (1: Jan, 12: Dec)")
 ax3.set_ylabel("Rata-rata Jumlah Sewa Sepeda")
+ax3.set_xticks(range(1, 13))
+ax3.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
 st.pyplot(fig3)
 
-# Section 4: Registered vs casual users
-st.subheader("4. Perbedaan Jumlah Pesewa Sepeda Berdasarkan Jenisnya")
-# Sample data for visualization
-registered_vs_casual = pd.DataFrame({
-    'User Type': ['Terdaftar', 'Kasual'],
-    'cnt': [350, 150]
-})
+# Visualization 4: Perbedaan jumlah pengguna sepeda berdasarkan tipe pengguna
+st.subheader("4. Perbedaan jumlah pengguna sepeda berdasarkan tipe pengguna")
+registered_avg = hour_df['registered'].mean()
+casual_avg = hour_df['casual'].mean()
 fig4, ax4 = plt.subplots(figsize=(8, 5))
-sns.barplot(x='User Type', y='cnt', data=registered_vs_casual, ax=ax4)
+sns.barplot(x=['Terdaftar', 'Kasual'], y=[registered_avg, casual_avg], ax=ax4)
 ax4.set_title("Rata-rata Penggunaan Sepeda oleh Pengguna Terdaftar vs Kasual")
 ax4.set_xlabel("Tipe Pengguna")
 ax4.set_ylabel("Rata-rata Jumlah Sewa Sepeda")
 st.pyplot(fig4)
 
-# Conclusions
+# Conclusion Section
 st.header("Kesimpulan")
-st.markdown(
-    """
-    - Jumlah pesewa sepeda tertinggi rata-rata ada pada jam 17 atau 5 sore yaitu sebanyak 400 lebih dan rata-rata paling sedikit pada pukul 4.
-    - Rata-rata jumlah pesewa sepeda paling banyak ada pada saat cuacanya cerah yaitu 200 lebih dan paling sedikit saat cuaca hujan lebat yaitu lebih dari 50.
-    - Rata-rata jumlah pesewa sepeda paling banyak ada pada bulan Mei dan Agustus.
-    - Perbedaan jumlah pesewa yang registered jauh lebih banyak dibanding yang kasual.
-    """
-)
+st.write("""
+**1. Jumlah pesewa sepeda tertinggi rata-rata ada pada jam 17 atau 5 sore yaitu sebanyak 400 lebih, dan rata-rata paling sedikit pada pukul 4.**  
+**2. Rata-rata jumlah pesewa sepeda paling banyak ada pada saat cuacanya cerah yaitu 200 lebih, dan paling sedikit saat cuaca hujan lebat yaitu lebih dari 50.**  
+**3. Rata-rata jumlah pesewa sepeda paling banyak ada pada bulan Mei dan Agustus.**  
+**4. Perbedaan jumlah pesewa yang terdaftar jauh lebih banyak dibanding yang kasual.**
+""")
+
